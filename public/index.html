@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verificar código JavaScript</title>
+</head>
+<body>
+  <h1>Consulta de Estudiantes</h1>
+  <button id="consultaEstudiantesBtn">Consultar Estudiantes</button>
+  <div id="resultado"></div>
+
+  <script>
+       async function consultarEstudiantes() {
+      try {
+        const response = await fetch('/consultarEstudiantes');
+        const data = await response.json();
+        mostrarResultados(data);
+      } catch (error) {
+        console.error('Error al realizar la consulta:', error);
+      }
+    }
+
+    function mostrarResultados(data) {
+      const resultadoDiv = document.getElementById('resultado');
+      resultadoDiv.innerHTML = ''; 
+      if (data && data.length > 0) {
+        const ul = document.createElement('ul');
+        data.forEach(estudiante => {
+          const li = document.createElement('li');
+          li.textContent = `${estudiante.nombre} - ${estudiante.curso}`;
+          ul.appendChild(li);
+        });
+        resultadoDiv.appendChild(ul);
+      } else {
+        resultadoDiv.textContent = 'No se encontraron estudiantes.';
+      }
+    }
+
+    const consultaEstudiantesBtn = document.getElementById('consultaEstudiantesBtn');
+    consultaEstudiantesBtn.addEventListener('click', consultarEstudiantes);
+  </script>
+</body>
+</html>
